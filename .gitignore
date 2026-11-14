@@ -1,0 +1,15 @@
+# dependencies and build output
+node_modules/
+dist/
+dist-web/
+*.tsbuildinfo
+
+# Raw text extracted from the course materials during analysis. It contains the full
+# textbook and a case-study file with other students' names, so it must never be published.
+materials-analysis/
+
+# local tooling
+.claude/
+*.log
+.DS_Store
+Thumbs.db

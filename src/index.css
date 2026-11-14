@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------- design tokens (RGB triplets so Tailwind can apply alpha) ---------- */
+:root, [data-theme='dark'] {
+  color-scheme: dark;
+  --mask: 18 26 33;      /* #121A21 blue-black solder mask */
+  --panel: 24 35 44;     /* #18232C */
+  --raised: 31 45 56;    /* #1F2D38 */
+  --line: 46 63 76;      /* #2E3F4C */
+  --ink: 233 230 220;    /* #E9E6DC silkscreen */
+  --dim: 143 163 176;    /* #8FA3B0 */
+  --gold: 212 168 75;    /* #D4A84B ENIG */
+  --ch1: 242 208 75;     /* scope CH1 yellow */
+  --ch2: 76 201 224;     /* scope CH2 cyan */
+  --ch3: 224 99 181;     /* scope CH3 magenta */
+  --ch4: 107 214 138;    /* scope CH4 green */
+  --led: 255 77 77;
+  --ok: 107 214 138;
+  --warn: 242 180 75;
+  --bad: 240 98 98;
+}
+[data-theme='light'] {
+  color-scheme: light;
+  --mask: 247 246 241;   /* datasheet paper */
+  --panel: 255 255 252;
+  --raised: 238 239 234;
+  --line: 214 218 214;
+  --ink: 27 38 48;
+  --dim: 88 104 116;
+  --gold: 150 112 24;
+  --ch1: 176 138 0;
+  --ch2: 0 128 160;
+  --ch3: 176 48 136;
+  --ch4: 30 140 70;
+  --led: 214 40 40;
+  --ok: 30 140 70;
+  --warn: 176 110 0;
+  --bad: 196 40 40;
+}
+
+@layer base {
+  html { font-family: theme('fontFamily.sans'); font-variation-settings: 'wdth' 100; }
+  body { @apply bg-mask text-ink antialiased; font-size: 16px; }
+  ::selection { background: rgb(var(--gold) / 0.35); }
+  :focus-visible { outline: 2px solid rgb(var(--gold)); outline-offset: 2px; border-radius: 3px; }
+  h1, h2, h3, .silk { font-stretch: 82%; font-variation-settings: 'wdth' 82; letter-spacing: 0.005em; }
+  code, kbd, pre { font-family: theme('fontFamily.mono'); }
+  * { scrollbar-width: thin; scrollbar-color: rgb(var(--line)) transparent; }
+  /* Grid and flex items default to min-width:auto, so a wide table or code block would stretch
+     its column past the screen. Let them shrink; the table/code wrapper scrolls instead. */
+  .grid > *, .flex-1 { min-width: 0; }
+  /* File paths and register names have no spaces; let them break instead of widening the page.
+     Code blocks are white-space:pre, where this has no effect. */
+  .font-mono, code { overflow-wrap: anywhere; }
+}
+
+@layer components {
+  .card { @apply rounded-md border border-line bg-panel; }
+  .btn { @apply inline-flex items-center gap-2 rounded border border-line bg-raised px-3 py-1.5 text-sm text-ink transition-colors hover:border-gold/70 disabled:cursor-not-allowed disabled:opacity-40; }
+  .btn-gold { @apply inline-flex items-center gap-2 rounded border border-gold bg-gold px-3 py-1.5 text-sm font-semibold text-mask transition-opacity hover:opacity-90 disabled:opacity-40; }
+  .chip { @apply inline-flex items-center gap-1 rounded-sm border border-line px-1.5 py-0.5 text-xs text-dim; }
+  .input { @apply rounded border border-line bg-raised px-2 py-1 text-sm text-ink outline-none focus:border-gold; }
+  .label { @apply text-sm text-dim; }
+  .kbd { @apply rounded border border-line bg-raised px-1.5 py-0.5 font-mono text-[0.7rem] text-dim; }
+  .reg { @apply font-mono text-[0.9em] text-ch2; }
+}
+
+/* ---------- long-form content ---------- */
+.md { @apply text-[1.0125rem] leading-[1.75]; }
+.md > p, .md > ul, .md > ol, .md > h2, .md > h3, .md > h4 { max-width: 72ch; }
+.md > * + * { margin-top: 0.9em; }
+.md h2 { @apply mt-10 text-2xl font-semibold text-ink; }
+.md h3 { @apply mt-8 text-xl font-semibold text-ink; }
+.md h4 { @apply mt-6 text-lg font-semibold text-ink; }
+.md p { @apply text-ink/90; }
+.md strong { @apply font-semibold text-ink; }
+.md a { @apply text-gold underline decoration-gold/40 underline-offset-2 hover:decoration-gold; }
+.md ul { @apply list-disc pl-6 marker:text-gold/70; }
+.md ol { @apply list-decimal pl-6 marker:text-dim; }
+.md li + li { margin-top: 0.3em; }
+.md :not(pre) > code { @apply rounded bg-raised px-1 py-px font-mono text-[0.86em] text-ch2; }
+.md table { @apply my-4 w-full border-collapse text-sm; }
+.md th { @apply border-b border-line bg-raised px-3 py-2 text-left font-semibold; }
+.md td { @apply border-b border-line/60 px-3 py-2 align-top; }
+.md .wide { max-width: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}

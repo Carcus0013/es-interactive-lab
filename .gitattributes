@@ -1,0 +1,2 @@
+# Keep LF line endings everywhere (content files embed code with exact line numbers).
+* text=auto eol=lf
